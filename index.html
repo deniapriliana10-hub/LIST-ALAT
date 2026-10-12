@@ -64,7 +64,6 @@ tbody tr:hover{background:#fafcff}
 .amber{background:#fff4d9;color:#8e5c00}
 .blue{background:#edf3ff;color:#2456ba}
 .muted{font-size:11px;color:var(--muted)}
-.asset-name{font-weight:800}
 .hidden{display:none!important}
 .empty{text-align:center;padding:30px;color:var(--muted)}
 .history-item{padding:13px;border:1px solid var(--line);border-radius:10px;margin-bottom:9px}
@@ -80,138 +79,456 @@ dialog::backdrop{background:#102b5288}
 <div class="app">
 <aside>
  <div class="brand">Inventaris<span>Pro</span><small>ASSET MANAGEMENT</small></div>
- <div><div class="nav-label">MENU UTAMA</div><nav>
-  <button class="active" data-page="dashboard">▦ &nbsp; Ringkasan</button>
-  <button data-page="assets">▤ &nbsp; Data Inventaris</button>
-  <button data-page="add">＋ &nbsp; Tambah Alat</button>
-  <button data-page="report">⚒ &nbsp; Lapor Kerusakan</button>
-  <button data-page="repairs">↻ &nbsp; Perbaikan</button>
-  <button data-page="history">◷ &nbsp; Riwayat Aktivitas</button>
- </nav></div>
+ <div>
+  <div class="nav-label">MENU UTAMA</div>
+  <nav>
+   <button class="active" data-page="dashboard">▦ &nbsp; Ringkasan</button>
+   <button data-page="assets">▤ &nbsp; Data Inventaris</button>
+   <button data-page="add">＋ &nbsp; Tambah Alat</button>
+   <button data-page="report">⚒ &nbsp; Lapor Kerusakan</button>
+   <button data-page="repairs">↻ &nbsp; Perbaikan</button>
+   <button data-page="history">◷ &nbsp; Riwayat Aktivitas</button>
+  </nav>
+ </div>
  <div class="side-note"><b>Akses melalui tautan</b><br>Tanpa login. Bagikan link hanya kepada orang yang dipercaya.</div>
 </aside>
 <main>
- <header class="topbar"><div><div class="crumb">MANAJEMEN ASET / <span id="crumb">RINGKASAN</span></div><div class="top-title" id="topTitle">Ringkasan Inventaris</div></div><div class="connection" id="connection">● Belum terhubung</div></header>
+ <header class="topbar">
+  <div>
+   <div class="crumb">MANAJEMEN ASET / <span id="crumb">RINGKASAN</span></div>
+   <div class="top-title" id="topTitle">Ringkasan Inventaris</div>
+  </div>
+  <div class="connection" id="connection">● Belum terhubung</div>
+ </header>
  <div class="content">
   <div id="setupNotice" class="card" style="margin-bottom:18px;background:#fff9e8;border-color:#f1dfae;color:#795600">
-   <b>Konfigurasi Firebase diperlukan.</b><br><span class="muted">Isi firebaseConfig di bagian JavaScript agar data dapat disimpan online.</span>
+   <b>Hubungkan Google Spreadsheet.</b><br>
+   <span class="muted">Isi URL Web App Google Apps Script pada bagian JavaScript.</span>
   </div>
 
   <section id="page-dashboard">
-   <div class="welcome"><div><div class="eyebrow">PUSAT KONTROL ASET</div><h1>Ringkasan Inventaris</h1><p>Pantau stok dan kondisi alat dari seluruh bagian.</p></div><button class="primary" onclick="showPage('add')">＋ Tambah Alat</button></div>
+   <div class="welcome">
+    <div><div class="eyebrow">PUSAT KONTROL ASET</div><h1>Ringkasan Inventaris</h1><p>Pantau stok dan kondisi alat dari seluruh bagian.</p></div>
+    <button class="primary" onclick="showPage('add')">＋ Tambah Alat</button>
+   </div>
    <div class="stats">
     <div class="card"><div class="stat-label">Jenis Alat</div><div class="stat-number" id="sKinds">0</div><div class="stat-sub">Jenis terdaftar</div></div>
     <div class="card"><div class="stat-label">Total Unit</div><div class="stat-number" id="sTotal">0</div><div class="stat-sub">Seluruh bagian</div></div>
     <div class="card"><div class="stat-label">Layak Pakai</div><div class="stat-number" id="sGood">0</div><div class="stat-sub">Siap digunakan</div></div>
     <div class="card"><div class="stat-label">Unit Rusak</div><div class="stat-number" id="sBroken">0</div><div class="stat-sub">Perlu ditindaklanjuti</div></div>
    </div>
-   <div class="panel"><div class="panel-head"><div><h2>Inventaris Terbaru</h2><p>Data alat yang terakhir diperbarui.</p></div><button class="light" onclick="showPage('assets')">Lihat Semua →</button></div><div class="table-wrap"><table><thead><tr><th>Nama Alat</th><th>Kode</th><th>Bagian</th><th>Total</th><th>Layak</th><th>Rusak</th></tr></thead><tbody id="recentRows"></tbody></table></div></div>
-   <div class="panel"><div class="panel-head"><div><h2>Laporan Terbaru</h2><p>Ringkasan laporan kerusakan.</p></div><button class="light" onclick="showPage('repairs')">Lihat Laporan →</button></div><div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Alat</th><th>Pelapor</th><th>Jumlah</th><th>Status</th></tr></thead><tbody id="recentReports"></tbody></table></div></div>
+   <div class="panel">
+    <div class="panel-head"><div><h2>Inventaris Terbaru</h2><p>Data alat yang terakhir diperbarui.</p></div><button class="light" onclick="showPage('assets')">Lihat Semua →</button></div>
+    <div class="table-wrap"><table><thead><tr><th>Nama Alat</th><th>Kode</th><th>Bagian</th><th>Total</th><th>Layak</th><th>Rusak</th></tr></thead><tbody id="recentRows"></tbody></table></div>
+   </div>
+   <div class="panel">
+    <div class="panel-head"><div><h2>Laporan Terbaru</h2><p>Ringkasan laporan kerusakan.</p></div><button class="light" onclick="showPage('repairs')">Lihat Laporan →</button></div>
+    <div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Alat</th><th>Pelapor</th><th>Jumlah</th><th>Status</th></tr></thead><tbody id="recentReports"></tbody></table></div>
+   </div>
   </section>
 
   <section id="page-assets" class="hidden">
    <div class="welcome"><div><div class="eyebrow">DATABASE ASET</div><h1>Data Inventaris</h1><p>Cari stok alat seluruh bagian.</p></div><button class="primary" onclick="showPage('add')">＋ Tambah Alat</button></div>
-   <div class="panel"><div class="toolbar"><input id="assetSearch" placeholder="⌕ Cari nama, kode, bagian..." oninput="renderAssets()"><select id="partFilter" onchange="renderAssets()"><option value="">Semua bagian</option></select><select id="conditionFilter" onchange="renderAssets()"><option value="">Semua kondisi</option><option value="good">Ada stok layak</option><option value="broken">Ada unit rusak</option><option value="empty">Stok layak habis</option></select><button class="light" onclick="exportCSV()">Ekspor CSV</button></div>
-   <div class="table-wrap"><table><thead><tr><th>Nama Alat</th><th>Kode</th><th>Bagian</th><th>Total</th><th>Layak</th><th>Rusak</th><th>Foto</th><th>Aksi</th></tr></thead><tbody id="assetRows"></tbody></table></div></div>
+   <div class="panel">
+    <div class="toolbar">
+     <input id="assetSearch" placeholder="⌕ Cari nama, kode, bagian..." oninput="renderAssets()">
+     <select id="partFilter" onchange="renderAssets()"><option value="">Semua bagian</option></select>
+     <select id="conditionFilter" onchange="renderAssets()"><option value="">Semua kondisi</option><option value="good">Ada stok layak</option><option value="broken">Ada unit rusak</option><option value="empty">Stok layak habis</option></select>
+     <button class="light" onclick="exportCSV()">Ekspor CSV</button>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Nama Alat</th><th>Kode</th><th>Bagian</th><th>Total</th><th>Layak</th><th>Rusak</th><th>Foto</th><th>Aksi</th></tr></thead><tbody id="assetRows"></tbody></table></div>
+   </div>
   </section>
 
-  <section id="page-add" class="hidden"><div class="welcome"><div><div class="eyebrow">FORMULIR ASET</div><h1 id="formTitle">Tambah Alat Baru</h1><p>Masukkan data alat dan jumlah unit.</p></div></div>
-   <div class="panel"><form id="assetForm"><input type="hidden" id="editId"><div class="form-grid">
-    <div class="field"><label>Nama alat *</label><input id="assetName" required maxlength="100" placeholder="Contoh: Termometer digital"></div>
-    <div class="field"><label>Kode inventaris</label><input id="assetCode" maxlength="50" placeholder="INV-001"></div>
-    <div class="field"><label>Bagian / Leader *</label><input id="assetPart" required maxlength="100" placeholder="Produksi / Leader A"></div>
-    <div class="field"><label>Total unit *</label><input id="assetTotal" type="number" min="0" step="1" required value="1"></div>
-    <div class="field"><label>Unit rusak</label><input id="assetBroken" type="number" min="0" step="1" required value="0"></div>
-    <div class="field"><label>Foto alat</label><input id="assetPhoto" type="file" accept="image/*"><small>Maksimal 3 MB.</small></div>
-    <div class="field full"><label>Catatan / lokasi</label><textarea id="assetNotes" maxlength="1000" placeholder="Lokasi penyimpanan atau keterangan tambahan"></textarea></div>
-   </div><div class="form-actions"><button class="primary" type="submit">Simpan Data</button><button class="light" type="button" onclick="resetForm()">Bersihkan</button></div></form></div>
+  <section id="page-add" class="hidden">
+   <div class="welcome"><div><div class="eyebrow">FORMULIR ASET</div><h1 id="formTitle">Tambah Alat Baru</h1><p>Masukkan data alat dan jumlah unit.</p></div></div>
+   <div class="panel">
+    <form id="assetForm">
+     <input type="hidden" id="editId">
+     <div class="form-grid">
+      <div class="field"><label>Nama alat *</label><input id="assetName" required maxlength="100" placeholder="Contoh: Termometer digital"></div>
+      <div class="field"><label>Kode inventaris</label><input id="assetCode" maxlength="50" placeholder="Kosongkan untuk kode otomatis"></div>
+      <div class="field"><label>Bagian / Leader *</label><input id="assetPart" required maxlength="100" placeholder="Produksi / Leader A"></div>
+      <div class="field"><label>Total unit *</label><input id="assetTotal" type="number" min="0" step="1" required value="1"></div>
+      <div class="field"><label>Unit rusak</label><input id="assetBroken" type="number" min="0" step="1" required value="0"></div>
+      <div class="field"><label>Foto alat</label><input id="assetPhoto" type="file" accept="image/*"><small>Maksimal 3 MB.</small></div>
+      <div class="field full"><label>Catatan / lokasi</label><textarea id="assetNotes" maxlength="1000" placeholder="Lokasi penyimpanan atau keterangan tambahan"></textarea></div>
+     </div>
+     <div class="form-actions"><button class="primary" type="submit">Simpan Data</button><button class="light" type="button" onclick="resetForm()">Bersihkan</button></div>
+    </form>
+   </div>
   </section>
 
-  <section id="page-report" class="hidden"><div class="welcome"><div><div class="eyebrow">PELAPORAN</div><h1>Lapor Kerusakan</h1><p>Laporkan alat yang rusak untuk ditindaklanjuti.</p></div></div>
-   <div class="panel"><form id="reportForm"><div class="form-grid">
-    <div class="field full"><label>Pilih alat *</label><select id="reportAsset" required><option value="">Pilih alat...</option></select></div>
-    <div class="field"><label>Nama pelapor / leader *</label><input id="reporter" required maxlength="100"></div>
-    <div class="field"><label>Jumlah unit rusak *</label><input id="reportQty" type="number" min="1" step="1" required value="1"></div>
-    <div class="field full"><label>Keterangan kerusakan *</label><textarea id="reportDesc" required maxlength="1500" placeholder="Jelaskan kerusakan yang ditemukan"></textarea></div>
-    <div class="field full"><label>Foto kerusakan</label><input id="reportPhoto" type="file" accept="image/*"><small>Maksimal 3 MB.</small></div>
-   </div><div class="form-actions"><button class="primary" type="submit">Kirim Laporan →</button></div></form></div>
+  <section id="page-report" class="hidden">
+   <div class="welcome"><div><div class="eyebrow">PELAPORAN</div><h1>Lapor Kerusakan</h1><p>Laporkan alat yang rusak untuk ditindaklanjuti.</p></div></div>
+   <div class="panel">
+    <form id="reportForm">
+     <div class="form-grid">
+      <div class="field full"><label>Pilih alat *</label><select id="reportAsset" required><option value="">Pilih alat...</option></select></div>
+      <div class="field"><label>Nama pelapor / leader *</label><input id="reporter" required maxlength="100"></div>
+      <div class="field"><label>Jumlah unit rusak *</label><input id="reportQty" type="number" min="1" step="1" required value="1"></div>
+      <div class="field full"><label>Keterangan kerusakan *</label><textarea id="reportDesc" required maxlength="1500" placeholder="Jelaskan kerusakan yang ditemukan"></textarea></div>
+      <div class="field full"><label>Foto kerusakan</label><input id="reportPhoto" type="file" accept="image/*"><small>Maksimal 3 MB.</small></div>
+     </div>
+     <div class="form-actions"><button class="primary" type="submit">Kirim Laporan →</button></div>
+    </form>
+   </div>
   </section>
 
-  <section id="page-repairs" class="hidden"><div class="welcome"><div><div class="eyebrow">TINDAK LANJUT</div><h1>Laporan & Perbaikan</h1><p>Pantau dan perbarui status penanganan.</p></div></div>
-   <div class="panel"><div class="toolbar"><input id="repairSearch" placeholder="Cari alat, pelapor, keterangan..." oninput="renderReports()"><select id="statusFilter" onchange="renderReports()"><option value="">Semua status</option><option>Menunggu</option><option>Diproses</option><option>Selesai</option><option>Tidak dapat diperbaiki</option></select></div>
-   <div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Alat / Bagian</th><th>Pelapor</th><th>Jumlah</th><th>Keterangan</th><th>Status</th><th>Foto</th></tr></thead><tbody id="reportRows"></tbody></table></div></div>
+  <section id="page-repairs" class="hidden">
+   <div class="welcome"><div><div class="eyebrow">TINDAK LANJUT</div><h1>Laporan & Perbaikan</h1><p>Pantau dan perbarui status penanganan.</p></div></div>
+   <div class="panel">
+    <div class="toolbar"><input id="repairSearch" placeholder="Cari alat, pelapor, keterangan..." oninput="renderReports()"><select id="statusFilter" onchange="renderReports()"><option value="">Semua status</option><option>Menunggu</option><option>Diproses</option><option>Selesai</option><option>Tidak dapat diperbaiki</option></select></div>
+    <div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Alat / Bagian</th><th>Pelapor</th><th>Jumlah</th><th>Keterangan</th><th>Status</th><th>Foto</th></tr></thead><tbody id="reportRows"></tbody></table></div>
+   </div>
   </section>
 
-  <section id="page-history" class="hidden"><div class="welcome"><div><div class="eyebrow">LOG AKTIVITAS</div><h1>Riwayat Aktivitas</h1><p>Catatan perubahan inventaris dan laporan.</p></div><button class="light" onclick="refreshData()">Muat Ulang</button></div><div class="panel" id="historyRows"></div></section>
+  <section id="page-history" class="hidden">
+   <div class="welcome"><div><div class="eyebrow">LOG AKTIVITAS</div><h1>Riwayat Aktivitas</h1><p>Catatan perubahan inventaris dan laporan.</p></div><button class="light" onclick="refreshData()">Muat Ulang</button></div>
+   <div class="panel" id="historyRows"></div>
+  </section>
   <div class="footer">InventarisPro · Manajemen Aset</div>
  </div>
 </main>
 </div>
-<dialog id="photoDialog"><div class="panel-head"><h2 id="photoTitle">Foto</h2><button class="light" onclick="photoDialog.close()">Tutup ✕</button></div><img id="largePhoto" style="display:block;max-width:100%;max-height:70vh;margin:auto" alt="Foto alat"></dialog>
+
+<dialog id="photoDialog">
+ <div class="panel-head"><h2 id="photoTitle">Foto</h2><button class="light" onclick="document.getElementById('photoDialog').close()">Tutup ✕</button></div>
+ <img id="largePhoto" style="display:block;max-width:100%;max-height:70vh;margin:auto" alt="Foto alat">
+</dialog>
 <div id="toast"></div>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+
 <script>
-// MASUKKAN KONFIGURASI FIREBASE ANDA DI SINI
-const firebaseConfig={
- apiKey:"GANTI_API_KEY",
- authDomain:"GANTI_PROJECT_ID.firebaseapp.com",
- databaseURL:"https://GANTI_PROJECT_ID-default-rtdb.firebaseio.com",
- projectId:"GANTI_PROJECT_ID",
- storageBucket:"GANTI_PROJECT_ID.appspot.com",
- messagingSenderId:"GANTI_MESSAGING_SENDER_ID",
- appId:"GANTI_APP_ID"
-};
-let db=null,storage=null,assets={},reports={},history={};
+// GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT YANG BERAKHIR /exec
+const API_URL = "TEMPEL_URL_WEB_APP_ANDA_DI_SINI";
+
+let assets={}, reports={}, history={};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const vals=o=>Object.entries(o||{}).map(([id,v])=>({id,...v}));
-const now=()=>Date.now(),fmt=t=>t?new Date(t).toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"}):"—";
-const total=a=>Math.max(0,Number(a.total)||0),broken=a=>Math.min(total(a),Math.max(0,Number(a.broken)||0)),good=a=>total(a)-broken(a);
-function toast(t){$("toast").textContent=t;$("toast").style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>$("toast").style.display="none",3500)}
-function showPage(p){document.querySelectorAll('[id^="page-"]').forEach(e=>e.classList.add("hidden"));$("page-"+p).classList.remove("hidden");document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));let names={dashboard:"Ringkasan Inventaris",assets:"Data Inventaris",add:"Formulir Alat",report:"Lapor Kerusakan",repairs:"Laporan & Perbaikan",history:"Riwayat Aktivitas"};$("topTitle").textContent=names[p];$("crumb").textContent=names[p].toUpperCase();if(p==="report")fillOptions();window.scrollTo(0,0)}
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
-async function log(action,detail){await db.ref("history").push({action,detail,at:now()})}
-async function upload(file,folder){if(!file)return "";if(!file.type.startsWith("image/"))throw Error("File harus berupa gambar.");if(file.size>3*1024*1024)throw Error("Foto maksimal 3 MB.");let r=storage.ref(folder+"/"+now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_"));await r.put(file);return r.getDownloadURL()}
-function badge(s){let c=s==="Selesai"?"green":s==="Diproses"?"blue":s==="Tidak dapat diperbaiki"?"red":"amber";return `<span class="badge ${c}">${esc(s||"Menunggu")}</span>`}
-function renderStats(){let a=vals(assets);$("sKinds").textContent=a.length;$("sTotal").textContent=a.reduce((n,x)=>n+total(x),0);$("sGood").textContent=a.reduce((n,x)=>n+good(x),0);$("sBroken").textContent=a.reduce((n,x)=>n+broken(x),0)}
-function renderPart(){let old=$("partFilter").value,parts=[...new Set(vals(assets).map(a=>a.part).filter(Boolean))].sort();$("partFilter").innerHTML='<option value="">Semua bagian</option>'+parts.map(p=>`<option>${esc(p)}</option>`).join("");$("partFilter").value=parts.includes(old)?old:""}
-function renderAssets(){let q=$("assetSearch").value.toLowerCase(),part=$("partFilter").value,cond=$("conditionFilter").value;let arr=vals(assets).filter(a=>[a.name,a.code,a.part,a.notes].join(" ").toLowerCase().includes(q)&&(!part||a.part===part)&&(!cond||(cond==="good"?good(a)>0:cond==="broken"?broken(a)>0:good(a)===0))).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));$("assetRows").innerHTML=arr.map(a=>`<tr><td><b>${esc(a.name)}</b><div class="muted">${esc(a.notes||"")}</div></td><td>${esc(a.code||"—")}</td><td>${esc(a.part)}</td><td>${total(a)}</td><td>${good(a)}</td><td>${broken(a)}</td><td>${a.photo?`<button class="light" onclick="openPhoto('${a.id}')">Lihat</button>`:"—"}</td><td><button class="light" onclick="editAsset('${a.id}')">Edit</button> <button class="danger" onclick="deleteAsset('${a.id}')">Hapus</button></td></tr>`).join("")||'<tr><td colspan="8" class="empty">Belum ada data yang cocok.</td></tr>'}
-function fillOptions(){let old=$("reportAsset").value;$("reportAsset").innerHTML='<option value="">Pilih alat...</option>'+vals(assets).map(a=>`<option value="${a.id}">${esc(a.name)} — ${esc(a.part)} (layak ${good(a)})</option>`).join("");if(assets[old])$("reportAsset").value=old}
-function renderDashboard(){let a=vals(assets).sort((x,y)=>(y.updatedAt||0)-(x.updatedAt||0)).slice(0,6);$("recentRows").innerHTML=a.map(x=>`<tr><td><b>${esc(x.name)}</b></td><td>${esc(x.code||"—")}</td><td>${esc(x.part)}</td><td>${total(x)}</td><td>${good(x)}</td><td>${broken(x)}</td></tr>`).join("")||'<tr><td colspan="6" class="empty">Belum ada data alat.</td></tr>';let r=vals(reports).sort((x,y)=>y.createdAt-x.createdAt).slice(0,5);$("recentReports").innerHTML=r.map(x=>`<tr><td>${fmt(x.createdAt)}</td><td>${esc(x.assetName)}</td><td>${esc(x.reporter)}</td><td>${x.quantity}</td><td>${badge(x.status)}</td></tr>`).join("")||'<tr><td colspan="5" class="empty">Belum ada laporan.</td></tr>'}
-function renderReports(){let q=$("repairSearch").value.toLowerCase(),st=$("statusFilter").value;let r=vals(reports).filter(x=>[x.assetName,x.part,x.reporter,x.description].join(" ").toLowerCase().includes(q)&&(!st||x.status===st)).sort((a,b)=>b.createdAt-a.createdAt);$("reportRows").innerHTML=r.map(x=>`<tr><td>${fmt(x.createdAt)}</td><td><b>${esc(x.assetName)}</b><div class="muted">${esc(x.part)}</div></td><td>${esc(x.reporter)}</td><td>${x.quantity}</td><td>${esc(x.description)}</td><td><select onchange="changeStatus('${x.id}',this.value)">${["Menunggu","Diproses","Selesai","Tidak dapat diperbaiki"].map(s=>`<option ${x.status===s?"selected":""}>${s}</option>`).join("")}</select></td><td>${x.photo?`<button class="light" onclick="openReportPhoto('${x.id}')">Lihat</button>`:"—"}</td></tr>`).join("")||'<tr><td colspan="7" class="empty">Belum ada laporan.</td></tr>'}
-function renderHistory(){$("historyRows").innerHTML=vals(history).sort((a,b)=>b.at-a.at).slice(0,100).map(x=>`<div class="history-item"><b>${esc(x.action)}</b><div>${esc(x.detail)}</div><div class="muted">${fmt(x.at)}</div></div>`).join("")||'<div class="empty">Belum ada riwayat aktivitas.</div>'}
-function renderAll(){renderStats();renderPart();renderAssets();fillOptions();renderDashboard();renderReports();renderHistory()}
-function resetForm(){$("assetForm").reset();$("editId").value="";$("assetTotal").value=1;$("assetBroken").value=0;$("formTitle").textContent="Tambah Alat Baru"}
-function editAsset(id){let a=assets[id];if(!a)return;$("editId").value=id;$("assetName").value=a.name||"";$("assetCode").value=a.code||"";$("assetPart").value=a.part||"";$("assetTotal").value=total(a);$("assetBroken").value=broken(a);$("assetNotes").value=a.notes||"";$("formTitle").textContent="Edit Data Alat";showPage("add")}
-async function deleteAsset(id){let a=assets[id];if(!a||!confirm("Hapus alat "+a.name+"?"))return;try{await db.ref("assets/"+id).remove();await log("Alat dihapus",a.name);toast("Data dihapus")}catch(e){toast(e.message)}}
-$("assetForm").onsubmit=async e=>{e.preventDefault();let id=$("editId").value,n=Number($("assetTotal").value),b=Number($("assetBroken").value);if(!Number.isInteger(n)||!Number.isInteger(b)||n<0||b<0||b>n)return toast("Jumlah stok tidak valid.");try{let old=assets[id]||{},photo=$("assetPhoto").files[0]?await upload($("assetPhoto").files[0],"assets"):old.photo||"";let item={name:$("assetName").value.trim(),code:$("assetCode").value.trim(),part:$("assetPart").value.trim(),total:n,broken:b,notes:$("assetNotes").value.trim(),photo,createdAt:old.createdAt||now(),updatedAt:now()};let ref=id?db.ref("assets/"+id):db.ref("assets").push();await ref.set(item);await log(id?"Alat diperbarui":"Alat ditambahkan",item.name+" · "+item.part);resetForm();showPage("assets");toast("Data berhasil disimpan")}catch(e){toast("Gagal: "+e.message)}};
-$("reportForm").onsubmit=async e=>{e.preventDefault();let id=$("reportAsset").value,a=assets[id],n=Number($("reportQty").value);if(!a)return toast("Pilih alat.");if(!Number.isInteger(n)||n<1||n>good(a))return toast("Jumlah melebihi stok layak ("+good(a)+").");try{let photo=await upload($("reportPhoto").files[0],"damage"),r={assetId:id,assetName:a.name,part:a.part,reporter:$("reporter").value.trim(),quantity:n,description:$("reportDesc").value.trim(),photo,status:"Menunggu",createdAt:now(),stockAdjusted:false};await db.ref("assets/"+id).update({broken:broken(a)+n,updatedAt:now()});await db.ref("reports").push(r);await log("Kerusakan dilaporkan",a.name+" · "+n+" unit");$("reportForm").reset();showPage("repairs");toast("Laporan berhasil dikirim")}catch(e){toast("Gagal: "+e.message)}};
-async function changeStatus(id,status){let r=reports[id];if(!r)return;try{if(status==="Selesai"&&!r.stockAdjusted){let a=assets[r.assetId];if(a)await db.ref("assets/"+r.assetId).update({broken:Math.max(0,broken(a)-Number(r.quantity)),updatedAt:now()});await db.ref("reports/"+id).update({stockAdjusted:true})}await db.ref("reports/"+id).update({status,updatedAt:now()});await log("Status perbaikan diubah",r.assetName+" · "+status);toast("Status diperbarui")}catch(e){toast(e.message)}}
-function openPhoto(id){let a=assets[id];if(a?.photo){$("photoTitle").textContent=a.name;$("largePhoto").src=a.photo;$("photoDialog").showModal()}}
-function openReportPhoto(id){let r=reports[id];if(r?.photo){$("photoTitle").textContent="Foto kerusakan";$("largePhoto").src=r.photo;$("photoDialog").showModal()}}
-function exportCSV(){let rows=[["Nama","Kode","Bagian","Total","Layak","Rusak"],...vals(assets).map(a=>[a.name,a.code,a.part,total(a),good(a),broken(a)])];let csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n"),url=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");a.href=url;a.download="inventaris.csv";a.click();URL.revokeObjectURL(url)}
-function refreshData(){if(!db)return;Promise.all(["assets","reports","history"].map(k=>db.ref(k).get().then(s=>({k,v:s.val()||{}})))).then(rs=>{rs.forEach(x=>{if(x.k==="assets")assets=x.v;if(x.k==="reports")reports=x.v;if(x.k==="history")history=x.v});renderAll();toast("Data dimuat ulang")}).catch(e=>toast(e.message))}
-const configured=!Object.values(firebaseConfig).some(v=>String(v).startsWith("GANTI_"));
-if(configured){try{firebase.initializeApp(firebaseConfig);db=firebase.database();storage=firebase.storage();$("setupNotice").classList.add("hidden");db.ref(".info/connected").on("value",s=>$("connection").textContent=s.val()?"● Database tersambung":"● Menghubungkan...");db.ref("assets").on("value",s=>{assets=s.val()||{};renderAll()},e=>toast(e.message));db.ref("reports").on("value",s=>{reports=s.val()||{};renderAll()});db.ref("history").limitToLast(100).on("value",s=>{history=s.val()||{};renderHistory()})}catch(e){toast("Konfigurasi Firebase salah: "+e.message)}}else{$("connection").textContent="● Belum dikonfigurasi"}
-</script>
-<!--
-PENGATURAN FIREBASE:
-1. Firebase Console > Project settings > Your apps > Web app: salin konfigurasi ke firebaseConfig.
-2. Aktifkan Realtime Database dan Storage.
-3. Database rules publik (berisiko):
-{
- "rules": { ".read": true, ".write": true }
+const now=()=>Date.now();
+const fmt=t=>t?new Date(Number(t)).toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"}):"—";
+const total=a=>Math.max(0,Number(a.total)||0);
+const broken=a=>Math.min(total(a),Math.max(0,Number(a.broken)||0));
+const good=a=>total(a)-broken(a);
+
+function toast(t){
+ $("toast").textContent=t;
+ $("toast").style.display="block";
+ clearTimeout(window.tt);
+ window.tt=setTimeout(()=>$("toast").style.display="none",4000);
 }
-4. Storage rules publik (berisiko):
-rules_version = '2';
-service firebase.storage {
- match /b/{bucket}/o {
-  match /{allPaths=**} { allow read, write: if true; }
+
+function showPage(p){
+ document.querySelectorAll('[id^="page-"]').forEach(e=>e.classList.add("hidden"));
+ $("page-"+p).classList.remove("hidden");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));
+ const names={dashboard:"Ringkasan Inventaris",assets:"Data Inventaris",add:"Formulir Alat",report:"Lapor Kerusakan",repairs:"Laporan & Perbaikan",history:"Riwayat Aktivitas"};
+ $("topTitle").textContent=names[p];
+ $("crumb").textContent=names[p].toUpperCase();
+ if(p==="report")fillOptions();
+ window.scrollTo(0,0);
+}
+
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+
+function apiGet(){
+ return new Promise((resolve,reject)=>{
+  if(!API_URL||API_URL.includes("TEMPEL_URL")){
+   reject(Error("Masukkan URL Web App Apps Script pada variabel API_URL."));
+   return;
+  }
+  const cb="inventarisCallback_"+Date.now()+"_"+Math.floor(Math.random()*100000);
+  const script=document.createElement("script");
+  const timer=setTimeout(()=>{
+   cleanup();
+   reject(Error("Waktu koneksi habis. Periksa URL Apps Script dan izin aksesnya."));
+  },20000);
+  function cleanup(){
+   clearTimeout(timer);
+   delete window[cb];
+   script.remove();
+  }
+  window[cb]=data=>{cleanup();resolve(data)};
+  script.onerror=()=>{
+   cleanup();
+   reject(Error("Gagal membaca data. Pastikan Apps Script sudah di-deploy sebagai Web App dan doGet mendukung callback."));
+  };
+  script.src=API_URL+(API_URL.includes("?")?"&":"?")+"callback="+cb+"&_="+Date.now();
+  document.body.appendChild(script);
+ });
+}
+
+async function apiPost(payload){
+ if(!API_URL||API_URL.includes("TEMPEL_URL"))throw Error("Masukkan URL Web App Apps Script pada variabel API_URL.");
+ await fetch(API_URL,{
+  method:"POST",
+  mode:"no-cors",
+  headers:{"Content-Type":"text/plain;charset=UTF-8"},
+  body:JSON.stringify(payload)
+ });
+}
+
+async function refreshData(silent=false){
+ try{
+  $("connection").textContent="● Menghubungkan ke Spreadsheet...";
+  const data=await apiGet();
+  assets=data.assets||{};
+  reports=data.reports||{};
+  history=data.history||{};
+  renderAll();
+  $("connection").textContent="● Spreadsheet terhubung";
+  $("setupNotice").classList.add("hidden");
+  if(!silent)toast("Data berhasil dimuat");
+ }catch(e){
+  $("connection").textContent="● Belum terhubung";
+  $("setupNotice").classList.remove("hidden");
+  if(!silent)toast(e.message);
  }
 }
-Siapa pun yang mengetahui URL database dapat mengubah atau menghapus data. Untuk penggunaan operasional, sebaiknya gunakan autentikasi atau backend aman.
--->
+
+async function saveAndRefresh(payload,message){
+ await apiPost(payload);
+ toast(message||"Permintaan dikirim. Memperbarui data...");
+ setTimeout(()=>refreshData(true),1600);
+ setTimeout(()=>refreshData(true),4000);
+}
+
+async function fileToData(file){
+ if(!file)return null;
+ if(!file.type.startsWith("image/"))throw Error("File harus berupa gambar.");
+ if(file.size>3*1024*1024)throw Error("Foto maksimal 3 MB sebelum dikompres.");
+ return new Promise((resolve,reject)=>{
+  const reader=new FileReader();
+  reader.onerror=()=>reject(Error("Foto gagal dibaca."));
+  reader.onload=()=>{
+   const img=new Image();
+   img.onerror=()=>reject(Error("Format foto tidak didukung."));
+   img.onload=()=>{
+    const max=1200;
+    const scale=Math.min(1,max/Math.max(img.width,img.height));
+    const canvas=document.createElement("canvas");
+    canvas.width=Math.round(img.width*scale);
+    canvas.height=Math.round(img.height*scale);
+    canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+    resolve({
+     photoData:canvas.toDataURL("image/jpeg",0.78),
+     photoName:(file.name||"foto").replace(/\.[^.]+$/,".jpg")
+    });
+   };
+   img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+ });
+}
+
+function badge(s){
+ const c=s==="Selesai"?"green":s==="Diproses"?"blue":s==="Tidak dapat diperbaiki"?"red":"amber";
+ return `<span class="badge ${c}">${esc(s||"Menunggu")}</span>`;
+}
+
+function renderStats(){
+ const a=vals(assets);
+ $("sKinds").textContent=a.length;
+ $("sTotal").textContent=a.reduce((n,x)=>n+total(x),0);
+ $("sGood").textContent=a.reduce((n,x)=>n+good(x),0);
+ $("sBroken").textContent=a.reduce((n,x)=>n+broken(x),0);
+}
+
+function renderPart(){
+ const old=$("partFilter").value;
+ const parts=[...new Set(vals(assets).map(a=>a.part).filter(Boolean))].sort();
+ $("partFilter").innerHTML='<option value="">Semua bagian</option>'+parts.map(p=>`<option>${esc(p)}</option>`).join("");
+ $("partFilter").value=parts.includes(old)?old:"";
+}
+
+function renderAssets(){
+ const q=$("assetSearch").value.toLowerCase();
+ const part=$("partFilter").value;
+ const cond=$("conditionFilter").value;
+ const arr=vals(assets).filter(a=>
+  [a.name,a.code,a.part,a.notes].join(" ").toLowerCase().includes(q)&&
+  (!part||a.part===part)&&
+  (!cond||(cond==="good"?good(a)>0:cond==="broken"?broken(a)>0:good(a)===0))
+ ).sort((a,b)=>(Number(b.updatedAt)||0)-(Number(a.updatedAt)||0));
+
+ $("assetRows").innerHTML=arr.map(a=>`<tr>
+  <td><b>${esc(a.name)}</b><div class="muted">${esc(a.notes||"")}</div></td>
+  <td>${esc(a.code||"—")}</td><td>${esc(a.part)}</td>
+  <td>${total(a)}</td><td>${good(a)}</td><td>${broken(a)}</td>
+  <td>${a.photo?`<button class="light" onclick="openPhoto('${a.id}')">Lihat</button>`:"—"}</td>
+  <td><button class="light" onclick="editAsset('${a.id}')">Edit</button> <button class="danger" onclick="deleteAsset('${a.id}')">Hapus</button></td>
+ </tr>`).join("")||'<tr><td colspan="8" class="empty">Belum ada data yang cocok.</td></tr>';
+}
+
+function fillOptions(){
+ const old=$("reportAsset").value;
+ $("reportAsset").innerHTML='<option value="">Pilih alat...</option>'+vals(assets).map(a=>`<option value="${a.id}">${esc(a.name)} — ${esc(a.part)} (layak ${good(a)})</option>`).join("");
+ if(assets[old])$("reportAsset").value=old;
+}
+
+function renderDashboard(){
+ const a=vals(assets).sort((x,y)=>(Number(y.updatedAt)||0)-(Number(x.updatedAt)||0)).slice(0,6);
+ $("recentRows").innerHTML=a.map(x=>`<tr>
+  <td><b>${esc(x.name)}</b></td><td>${esc(x.code||"—")}</td><td>${esc(x.part)}</td>
+  <td>${total(x)}</td><td>${good(x)}</td><td>${broken(x)}</td>
+ </tr>`).join("")||'<tr><td colspan="6" class="empty">Belum ada data alat.</td></tr>';
+
+ const r=vals(reports).sort((x,y)=>(Number(y.createdAt)||0)-(Number(x.createdAt)||0)).slice(0,5);
+ $("recentReports").innerHTML=r.map(x=>`<tr>
+  <td>${fmt(x.createdAt)}</td><td>${esc(x.assetName)}</td><td>${esc(x.reporter)}</td>
+  <td>${x.quantity}</td><td>${badge(x.status)}</td>
+ </tr>`).join("")||'<tr><td colspan="5" class="empty">Belum ada laporan.</td></tr>';
+}
+
+function renderReports(){
+ const q=$("repairSearch").value.toLowerCase();
+ const st=$("statusFilter").value;
+ const r=vals(reports).filter(x=>
+  [x.assetName,x.part,x.reporter,x.description].join(" ").toLowerCase().includes(q)&&(!st||x.status===st)
+ ).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0));
+
+ $("reportRows").innerHTML=r.map(x=>`<tr>
+  <td>${fmt(x.createdAt)}</td>
+  <td><b>${esc(x.assetName)}</b><div class="muted">${esc(x.part)}</div></td>
+  <td>${esc(x.reporter)}</td><td>${x.quantity}</td><td>${esc(x.description)}</td>
+  <td><select onchange="changeStatus('${x.id}',this.value)">${["Menunggu","Diproses","Selesai","Tidak dapat diperbaiki"].map(s=>`<option ${x.status===s?"selected":""}>${s}</option>`).join("")}</select></td>
+  <td>${x.photo?`<button class="light" onclick="openReportPhoto('${x.id}')">Lihat</button>`:"—"}</td>
+ </tr>`).join("")||'<tr><td colspan="7" class="empty">Belum ada laporan.</td></tr>';
+}
+
+function renderHistory(){
+ $("historyRows").innerHTML=vals(history).sort((a,b)=>(Number(b.at)||0)-(Number(a.at)||0)).slice(0,100).map(x=>`
+  <div class="history-item"><b>${esc(x.action)}</b><div>${esc(x.detail)}</div><div class="muted">${fmt(x.at)}</div></div>
+ `).join("")||'<div class="empty">Belum ada riwayat aktivitas.</div>';
+}
+
+function renderAll(){
+ renderStats();renderPart();renderAssets();fillOptions();renderDashboard();renderReports();renderHistory();
+}
+
+function resetForm(){
+ $("assetForm").reset();
+ $("editId").value="";
+ $("assetTotal").value=1;
+ $("assetBroken").value=0;
+ $("formTitle").textContent="Tambah Alat Baru";
+}
+
+function editAsset(id){
+ const a=assets[id];
+ if(!a)return;
+ $("editId").value=id;
+ $("assetName").value=a.name||"";
+ $("assetCode").value=a.code||"";
+ $("assetPart").value=a.part||"";
+ $("assetTotal").value=total(a);
+ $("assetBroken").value=broken(a);
+ $("assetNotes").value=a.notes||"";
+ $("formTitle").textContent="Edit Data Alat";
+ showPage("add");
+}
+
+async function deleteAsset(id){
+ const a=assets[id];
+ if(!a||!confirm("Hapus alat "+a.name+"?"))return;
+ try{
+  await saveAndRefresh({action:"delete",type:"assets",data:{id}},"Permintaan hapus dikirim.");
+ }catch(e){toast("Gagal: "+e.message)}
+}
+
+function nextAssetCode(){
+ let max=0;
+ vals(assets).forEach(a=>{
+  const m=String(a.code||"").match(/^INV-(\d+)$/i);
+  if(m)max=Math.max(max,Number(m[1]));
+ });
+ return "INV-"+String(max+1).padStart(3,"0");
+}
+
+$("assetForm").onsubmit=async e=>{
+ e.preventDefault();
+ const id=$("editId").value;
+ const n=Number($("assetTotal").value);
+ const b=Number($("assetBroken").value);
+
+ if(!Number.isInteger(n)||!Number.isInteger(b)||n<0||b<0||b>n){
+  return toast("Jumlah stok tidak valid.");
+ }
+
+ try{
+  const old=assets[id]||{};
+  let photo=old.photo||"";
+  let photoData=null;
+  if($("assetPhoto").files[0])photoData=await fileToData($("assetPhoto").files[0]);
+
+  const item={
+   id:id||"AST-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),
+   name:$("assetName").value.trim(),
+   code:$("assetCode").value.trim()||old.code||nextAssetCode(),
+   part:$("assetPart").value.trim(),
+   total:n,broken:b,notes:$("assetNotes").value.trim(),photo,
+   createdAt:old.createdAt||now(),updatedAt:now()
+  };
+
+  if(photoData)Object.assign(item,photoData);
+  await saveAndRefresh({action:"save",type:"assets",data:item},"Data alat dikirim untuk disimpan.");
+  resetForm();
+  showPage("assets");
+ }catch(e){toast("Gagal: "+e.message)}
+};
+
+$("reportForm").onsubmit=async e=>{
+ e.preventDefault();
+ const id=$("reportAsset").value;
+ const a=assets[id];
+ const n=Number($("reportQty").value);
+
+ if(!a)return toast("Pilih alat.");
+ if(!Number.isInteger(n)||n<1||n>good(a))return toast("Jumlah melebihi stok layak ("+good(a)+").");
+
+ try{
+  const photoData=$("reportPhoto").files[0]?await fileToData($("reportPhoto").files[0]):null;
+  const r={
+   id:"REP-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),
+   assetId:id,assetName:a.name,part:a.part,
+   reporter:$("reporter").value.trim(),quantity:n,
+   description:$("reportDesc").value.trim(),photo:"",
+   status:"Menunggu",createdAt:now(),stockAdjusted:false
+  };
+  if(photoData)Object.assign(r,photoData);
+  await saveAndRefresh({action:"newReport",data:{report:r}},"Laporan kerusakan dikirim.");
+  $("reportForm").reset();
+  showPage("repairs");
+ }catch(e){toast("Gagal: "+e.message)}
+};
+
+async function changeStatus(id,status){
+ try{
+  await saveAndRefresh({action:"status",data:{id,status}},"Perubahan status dikirim.");
+ }catch(e){toast("Gagal: "+e.message)}
+}
+
+function openPhoto(id){
+ const a=assets[id];
+ if(a?.photo){$("photoTitle").textContent=a.name;$("largePhoto").src=a.photo;$("photoDialog").showModal()}
+}
+function openReportPhoto(id){
+ const r=reports[id];
+ if(r?.photo){$("photoTitle").textContent="Foto kerusakan";$("largePhoto").src=r.photo;$("photoDialog").showModal()}
+}
+
+function exportCSV(){
+ const rows=[["Nama","Kode","Bagian","Total","Layak","Rusak"],...vals(assets).map(a=>[a.name,a.code,a.part,total(a),good(a),broken(a)])];
+ const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const url=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));
+ const a=document.createElement("a");
+ a.href=url;a.download="inventaris.csv";a.click();
+ URL.revokeObjectURL(url);
+}
+
+refreshData(true);
+setInterval(()=>refreshData(true),60000);
+</script>
 </body>
 </html>
